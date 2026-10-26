@@ -89,6 +89,7 @@ An institutional research deep dive and empirical verification test suite decons
 ├── scripts/
 │   ├── metadata_leakage_analyzer.py          # Differential entropy & gas analyzer
 │   ├── master_week5_audit.py                 # Live Rayls L1 RPC telemetry audit
+│   ├── anvil_fork_simulation.sh              # Local mainnet forking & storage override
 │   └── generate_week_5_brand_assets.py       # High-contrast Noir brand visuals generator
 ├── data/
 │   ├── metadata_leakage_results.json         # Raw entropy & gas profiling benchmark data
@@ -151,12 +152,18 @@ cast storage 0x07E17e17e17e17E17E17E17e17E17e17e17e17E2 \
 # Returns: 0x0000000000000000000000009bd6479bd40d18e6211322078ba1ef304fb31fd2
 ```
 
-### 3. Run Metadata Entropy Analyzer
+### 3. Run Anvil Mainnet Fork & Storage Override Simulation
+```bash
+./scripts/anvil_fork_simulation.sh
+# Forks Rayls Mainnet locally at current block, impersonates FeeAggregator, and overrides storage slot 1
+```
+
+### 4. Run Metadata Entropy Analyzer
 ```bash
 python scripts/metadata_leakage_analyzer.py
 ```
 
-### 4. Run Master On-Chain Telemetry Audit
+### 5. Run Master On-Chain Telemetry Audit
 ```bash
 python scripts/master_week5_audit.py
 ```

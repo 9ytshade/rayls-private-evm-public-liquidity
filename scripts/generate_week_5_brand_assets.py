@@ -4,11 +4,11 @@ scripts/generate_week_5_brand_assets.py
 Generates the complete suite of high-contrast Noir Ventures brand assets for Week 5.
 Adheres strictly to the Noir Ventures Rayls Brand Guide:
 - Palette: Primary Horizontal Gradient (#B49AFF to #ECFB3E), Dark Cards (#18181C), Card Border (#373741).
-- Green Accent (#8CF78B), Red/Revert Accent (#FF6B6B).
-- Official untouched black logo from Brand Guide on bright pill badge.
-- Generates 4 assets:
-  1. cover_image_liquidity_bridge.png (1600x900)
-  2. diagram_1_unifi_liquidity_topology.png (1600x900)
+- Green Accent (#8CF78B), Red/Revert Accent (#FF6B6B), Cyan Accent (#60DAFB).
+- Official untouched White logo from Brand Guide on dark background (no awkward white pill boxes).
+- Generates 4 assets with Twitter/X-safe margins (min 120px vertical padding) and zero text overflow:
+  1. cover_image_liquidity_bridge.png (1600x900, Twitter-safe content zone)
+  2. diagram_1_unifi_liquidity_topology.png (1600x900, expanded card height, zero overflow)
   3. diagram_2_metadata_leakage_comparison.png (1600x900)
   4. evidence_boundary_matrix_table.png (1920x1800)
 """
@@ -19,7 +19,7 @@ from PIL import Image, ImageDraw, ImageFont
 # Workspace directories
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ASSETS_DIR = os.path.join(BASE_DIR, "assets")
-LOGO_PATH = r"c:\Users\9ytshade\Desktop\Rayls\Brand_Guide\Rayls_Logo_Pack\PNG\Rayls_Logo_Black.png"
+LOGO_WHITE_PATH = r"c:\Users\9ytshade\Desktop\Rayls\Brand_Guide\Rayls_Logo_Pack\PNG\Rayls_Logo_White.png"
 
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
@@ -57,44 +57,31 @@ def draw_horizontal_gradient_rect(draw, bbox, color_left, color_right):
         draw.line([(x0 + i, y0), (x0 + i, y1)], fill=(r, g, b))
 
 def draw_brand_header(draw, img, title, subtitle, width=1600):
-    """Draws top brand band, logo pill, and titles."""
-    # Top 8px primary gradient bar
-    draw_horizontal_gradient_rect(draw, (0, 0, width, 8), COLOR_PURPLE, COLOR_YELLOW)
+    """Draws top brand band, official white logo, and titles (clean, no top-right text)."""
+    # Top 6px primary gradient bar
+    draw_horizontal_gradient_rect(draw, (0, 0, width, 6), COLOR_PURPLE, COLOR_YELLOW)
     
-    # Official logo pill in top-left
-    if os.path.exists(LOGO_PATH):
+    # Official white logo in top-left directly on dark background
+    if os.path.exists(LOGO_WHITE_PATH):
         try:
-            logo_raw = Image.open(LOGO_PATH).convert("RGBA")
-            # Resize preserving aspect ratio
-            logo_w = 110
+            logo_raw = Image.open(LOGO_WHITE_PATH).convert("RGBA")
+            logo_w = 150
             aspect = logo_raw.height / logo_raw.width
             logo_h = int(logo_w * aspect)
             logo_resized = logo_raw.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-            
-            # White pill badge background
-            pill_pad = 12
-            pill_x0, pill_y0 = 60, 28
-            pill_x1, pill_y1 = pill_x0 + logo_w + (pill_pad * 2), pill_y0 + logo_h + (pill_pad * 2)
-            draw.rounded_rectangle((pill_x0, pill_y0, pill_x1, pill_y1), radius=8, fill=(255, 255, 255))
-            img.paste(logo_resized, (pill_x0 + pill_pad, pill_y0 + pill_pad), logo_resized)
+            img.paste(logo_resized, (60, 24), logo_resized)
         except Exception as e:
             print(f"Warning: Logo paste error: {e}")
 
-    # Top-right Quest badge
-    badge_font = get_font("arialbd.ttf", 15)
-    badge_text = "THE RAIL // WEEK 5 RESEARCH LABS"
-    draw.rounded_rectangle((width - 380, 32, width - 60, 72), radius=6, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
-    draw.text((width - 360, 42), badge_text, font=badge_font, fill=COLOR_YELLOW)
-
-    # Main Title & Subtitle
-    title_font = get_font("arialbd.ttf", 32)
-    sub_font = get_font("arial.ttf", 17)
+    # Main Title & Subtitle (Left-aligned, crisp hierarchy)
+    title_font = get_font("arialbd.ttf", 28)
+    sub_font = get_font("arial.ttf", 15)
     
-    draw.text((60, 100), title, font=title_font, fill=COLOR_TEXT_WHITE)
-    draw.text((60, 145), subtitle, font=sub_font, fill=COLOR_TEXT_MUTED)
+    draw.text((60, 84), title, font=title_font, fill=COLOR_TEXT_WHITE)
+    draw.text((60, 126), subtitle, font=sub_font, fill=COLOR_TEXT_MUTED)
 
 # ==============================================================================
-# ASSET 1: COVER IMAGE (1600x900)
+# ASSET 1: COVER IMAGE (1600x900) — TWITTER / X SAFE ZONE (130px Bottom Margin)
 # ==============================================================================
 def generate_cover_image():
     w, h = 1600, 900
@@ -106,8 +93,8 @@ def generate_cover_image():
                       "Deconstructing Walled Gardens, Metadata Leakage, the Orchestrator, & Zero-Knowledge Netting", 
                       width=w)
 
-    # 3 High-Impact Cards across center
-    card_y0, card_y1 = 200, 720
+    # 3 High-Impact Cards across center (safe y-boundaries: 165 to 660)
+    card_y0, card_y1 = 165, 655
     card_w = 460
     gap = 40
     start_x = 60
@@ -160,26 +147,25 @@ def generate_cover_image():
         
         # Card Background
         draw.rounded_rectangle((cx0, card_y0, cx1, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=2)
-        
         # Card Top Accent Band
         draw.rounded_rectangle((cx0, card_y0, cx1, card_y0 + 6), radius=6, fill=c["accent"])
 
         # Tier & Title
-        draw.text((cx0 + 24, card_y0 + 28), c["tier"], font=get_font("arialbd.ttf", 14), fill=c["accent"])
-        draw.text((cx0 + 24, card_y0 + 58), c["name"], font=get_font("arialbd.ttf", 26), fill=COLOR_TEXT_WHITE)
+        draw.text((cx0 + 24, card_y0 + 24), c["tier"], font=get_font("arialbd.ttf", 13), fill=c["accent"])
+        draw.text((cx0 + 24, card_y0 + 52), c["name"], font=get_font("arialbd.ttf", 24), fill=COLOR_TEXT_WHITE)
 
         # Badge pill
-        draw.rounded_rectangle((cx0 + 24, card_y0 + 105, cx1 - 24, card_y0 + 140), radius=6, fill=(35, 35, 42))
-        draw.text((cx0 + 36, card_y0 + 114), c["badge"], font=get_font("arialbd.ttf", 13), fill=c["accent"])
+        draw.rounded_rectangle((cx0 + 24, card_y0 + 95, cx1 - 24, card_y0 + 130), radius=6, fill=(35, 35, 42))
+        draw.text((cx0 + 36, card_y0 + 104), c["badge"], font=get_font("arialbd.ttf", 12), fill=c["accent"])
 
         # Bullet Items
-        item_y = card_y0 + 165
+        item_y = card_y0 + 152
         for it in c["items"]:
-            draw.text((cx0 + 24, item_y), it, font=get_font("arial.ttf", 16), fill=COLOR_TEXT_MUTED)
-            item_y += 52
+            draw.text((cx0 + 24, item_y), it, font=get_font("arial.ttf", 15), fill=COLOR_TEXT_MUTED)
+            item_y += 46
 
-    # Bottom Metric Bar
-    draw.rounded_rectangle((60, 755, w - 60, 845), radius=10, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    # Bottom Metric Bar: Placed at y=685 to y=765 (leaves 135px bottom margin, immune to Twitter crop!)
+    draw.rounded_rectangle((60, 685, w - 60, 765), radius=10, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
     
     metrics = [
         ("PUBLIC RPC CHAIN ID", "72957 (0x11cfd)", COLOR_YELLOW),
@@ -191,15 +177,15 @@ def generate_cover_image():
     sec_w = (w - 120) // 4
     for i, (m_lbl, m_val, m_col) in enumerate(metrics):
         mx = 60 + (i * sec_w) + 25
-        draw.text((mx, 770), m_lbl, font=get_font("arialbd.ttf", 13), fill=COLOR_TEXT_DIM)
-        draw.text((mx, 796), m_val, font=get_font("arialbd.ttf", 20), fill=m_col)
+        draw.text((mx, 700), m_lbl, font=get_font("arialbd.ttf", 12), fill=COLOR_TEXT_DIM)
+        draw.text((mx, 724), m_val, font=get_font("arialbd.ttf", 18), fill=m_col)
 
     out_file = os.path.join(ASSETS_DIR, "cover_image_liquidity_bridge.png")
     img.save(out_file, quality=95)
-    print(f"[+] Saved Cover Image: {out_file}")
+    print(f"[+] Saved Cover Image (Twitter Safe Zone): {out_file}")
 
 # ==============================================================================
-# ASSET 2: UNIFI ARCHITECTURAL TOPOLOGY (1600x900)
+# ASSET 2: UNIFI ARCHITECTURAL TOPOLOGY (1600x900) — ZERO TEXT OVERFLOW
 # ==============================================================================
 def generate_topology_diagram():
     w, h = 1600, 900
@@ -211,97 +197,101 @@ def generate_topology_diagram():
                       "Decoupled Three-Tier Topology: Sovereign Subnets <-> Orchestrator Privacy Hub <-> Public L1", 
                       width=w)
 
-    card_y0, card_y1 = 200, 730
+    # Card boundaries expanded: y0=165 to y1=745 (height: 580px)
+    card_y0, card_y1 = 165, 745
 
     # Box 1: Sovereign Subnets (Left)
     draw.rounded_rectangle((60, card_y0, 480, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=2)
     draw.rounded_rectangle((60, card_y0, 480, card_y0 + 6), radius=6, fill=COLOR_PURPLE)
-    draw.text((85, card_y0 + 25), "SOVEREIGN SUBNETS", font=get_font("arialbd.ttf", 22), fill=COLOR_TEXT_WHITE)
-    draw.text((85, card_y0 + 58), "Private Institutional Execution", font=get_font("arial.ttf", 15), fill=COLOR_PURPLE)
+    draw.text((85, card_y0 + 22), "SOVEREIGN SUBNETS", font=get_font("arialbd.ttf", 20), fill=COLOR_TEXT_WHITE)
+    draw.text((85, card_y0 + 52), "Private Institutional Execution", font=get_font("arial.ttf", 14), fill=COLOR_PURPLE)
 
     sub_items = [
-        "Subnet A: Tier-1 Commercial Bank",
-        "  * Retail/Corporate Tokenized Deposits",
-        "  * Confidential KYC & Account Registry",
-        "  * High-speed Reth (Rust EVM) Engine",
-        "",
-        "Subnet B: Asset Manager / Custody",
-        "  * Institutional Tokenized Bond Funds",
-        "  * Private Order Routing & Portfolios",
-        "",
-        "Confidentiality Invariant:",
-        "  * Zero unencrypted order book leakage",
-        "  * Complies with Banking Secrecy laws"
+        ("Subnet A: Commercial Bank", True, COLOR_TEXT_WHITE),
+        ("  * Retail/Corporate Tokenized Deposits", False, COLOR_TEXT_MUTED),
+        ("  * Confidential KYC & Account Registry", False, COLOR_TEXT_MUTED),
+        ("  * High-speed Reth (Rust EVM) Engine", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("Subnet B: Asset Manager", True, COLOR_TEXT_WHITE),
+        ("  * Institutional Tokenized Bond Funds", False, COLOR_TEXT_MUTED),
+        ("  * Private Order Routing & Portfolios", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("Confidentiality Invariant:", True, COLOR_PURPLE),
+        ("  * Zero unencrypted order book leakage", False, COLOR_TEXT_MUTED),
+        ("  * Banking Secrecy (LC 105) Protected", False, COLOR_TEXT_MUTED)
     ]
-    sy = card_y0 + 95
-    for sit in sub_items:
-        draw.text((85, sy), sit, font=get_font("consola.ttf" if "*" in sit else "arialbd.ttf" if ":" in sit else "arial.ttf", 14), fill=COLOR_TEXT_MUTED)
-        sy += 29
+    sy = card_y0 + 85
+    for s_txt, is_bld, col in sub_items:
+        f = get_font("arialbd.ttf" if is_bld else "consola.ttf" if "*" in s_txt else "arial.ttf", 13)
+        draw.text((85, sy), s_txt, font=f, fill=col)
+        sy += 24
 
-    # Box 2: The Orchestrator / Privacy Hub (Center)
-    draw.rounded_rectangle((530, card_y0, 1070, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_YELLOW, width=2)
-    draw.rounded_rectangle((530, card_y0, 1070, card_y0 + 6), radius=6, fill=COLOR_YELLOW)
-    draw.text((555, card_y0 + 25), "THE ORCHESTRATOR / PRIVACY HUB", font=get_font("arialbd.ttf", 22), fill=COLOR_YELLOW)
-    draw.text((555, card_y0 + 58), "Rayls Privacy Network System (Enygma ZK Engine)", font=get_font("arial.ttf", 15), fill=COLOR_TEXT_MUTED)
+    # Box 2: The Orchestrator / Privacy Hub (Center) — Fixed Overflow
+    draw.rounded_rectangle((520, card_y0, 1080, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_YELLOW, width=2)
+    draw.rounded_rectangle((520, card_y0, 1080, card_y0 + 6), radius=6, fill=COLOR_YELLOW)
+    draw.text((545, card_y0 + 22), "THE ORCHESTRATOR / PRIVACY HUB", font=get_font("arialbd.ttf", 20), fill=COLOR_YELLOW)
+    draw.text((545, card_y0 + 52), "Rayls Privacy Network System (Enygma ZK Engine)", font=get_font("arial.ttf", 14), fill=COLOR_TEXT_MUTED)
 
     orch_items = [
-        "1. Enygma Zero-Knowledge Proof Verifier",
-        "   - Alt_BN128 Pairing precompile (0x08) recognition",
-        "   - Verifies range proofs (a >= 0) and solvency",
-        "",
-        "2. Additive Homomorphic Netting Matrix",
-        "   - Evaluates: [[Bal_net]] = Product([[In]]) * Product([[Out]])^-1",
-        "   - Bilateral trade sizes remain fully encrypted",
-        "   - Achieves 98.3% Collateral Optimization in batch",
-        "",
-        "3. Wholesale CBDC Reserve Anchor (Drex)",
-        "   - Direct backing via Central Bank reserve accounts",
-        "   - Tokenized deposits settled DvP vs. Federal Bonds",
-        "",
-        "4. Dual-Authority Viewing Key Registry",
-        "   - Ephemeral ECDH shared secret derivation",
-        "   - Real-time statutory auditing for Central Banks"
+        ("1. Enygma Zero-Knowledge Proof Verifier", True, COLOR_YELLOW),
+        ("   - Alt_BN128 Pairing precompile (0x08) recognition", False, COLOR_TEXT_MUTED),
+        ("   - Verifies range proofs (a >= 0) and solvency", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("2. Additive Homomorphic Netting Matrix", True, COLOR_YELLOW),
+        ("   - Evaluates: [[Bal_net]] = [[In]] - [[Out]] on ciphertexts", False, COLOR_TEXT_MUTED),
+        ("   - Bilateral trade sizes remain fully encrypted", False, COLOR_TEXT_MUTED),
+        ("   - Achieves 98.3% Collateral Optimization in batch", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("3. Wholesale CBDC Reserve Anchor (Drex)", True, COLOR_YELLOW),
+        ("   - Direct backing via Central Bank reserve accounts", False, COLOR_TEXT_MUTED),
+        ("   - Tokenized deposits settled DvP vs. Federal Bonds", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("4. Dual-Authority Viewing Key Registry", True, COLOR_YELLOW),
+        ("   - Ephemeral ECDH shared secret derivation", False, COLOR_TEXT_MUTED),
+        ("   - Real-time statutory auditing for Central Banks", False, COLOR_TEXT_MUTED)
     ]
-    oy = card_y0 + 95
-    for oit in orch_items:
-        draw.text((555, oy), oit, font=get_font("consola.ttf" if "   -" in oit or "[[" in oit else "arialbd.ttf" if oit.startswith(("1.", "2.", "3.", "4.")) else "arial.ttf", 14), fill=COLOR_TEXT_MUTED)
-        oy += 29
+    oy = card_y0 + 85
+    for o_txt, is_bld, col in orch_items:
+        f = get_font("arialbd.ttf" if is_bld else "consola.ttf" if "   -" in o_txt else "arial.ttf", 13)
+        draw.text((545, oy), o_txt, font=f, fill=col)
+        oy += 24
 
     # Box 3: Public Chain L1 (Right)
     draw.rounded_rectangle((1120, card_y0, 1540, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=2)
     draw.rounded_rectangle((1120, card_y0, 1540, card_y0 + 6), radius=6, fill=COLOR_GREEN)
-    draw.text((1145, card_y0 + 25), "RAYLS PUBLIC CHAIN", font=get_font("arialbd.ttf", 22), fill=COLOR_TEXT_WHITE)
-    draw.text((1145, card_y0 + 58), "Decentralized Settlement Layer", font=get_font("arial.ttf", 15), fill=COLOR_GREEN)
+    draw.text((1145, card_y0 + 22), "RAYLS PUBLIC CHAIN", font=get_font("arialbd.ttf", 20), fill=COLOR_TEXT_WHITE)
+    draw.text((1145, card_y0 + 52), "Decentralized Settlement Layer", font=get_font("arial.ttf", 14), fill=COLOR_GREEN)
 
     pub_items = [
-        "Canonical On-Chain Telemetry:",
-        "  * Chain ID: 72957 (0x11cfd)",
-        "  * Head Block: #13,265,264+",
-        "  * Client: Reth 1.4.1 (6909618b)",
-        "  * Gas Ceiling: 500,000,000 gas",
-        "",
-        "FeeAggregator Core Contract:",
-        "  * Proxy: 0x07E1...17E2",
-        "  * Impl:  0x9bd6...1fd2",
-        "",
-        "Open Market Liquidity:",
-        "  * DEXs, AMMs, Lending Markets",
-        "  * Zero PII Broadcasted"
+        ("Canonical On-Chain Telemetry:", True, COLOR_TEXT_WHITE),
+        ("  * Chain ID: 72957 (0x11cfd)", False, COLOR_TEXT_MUTED),
+        ("  * Head Block: #13,265,264+", False, COLOR_TEXT_MUTED),
+        ("  * Client: Reth 1.4.1 (6909618b)", False, COLOR_TEXT_MUTED),
+        ("  * Gas Ceiling: 500,000,000 gas", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("FeeAggregator Core Contract:", True, COLOR_TEXT_WHITE),
+        ("  * Proxy: 0x07E1...17E2", False, COLOR_TEXT_MUTED),
+        ("  * Impl:  0x9bd6...1fd2", False, COLOR_TEXT_MUTED),
+        ("", False, COLOR_TEXT_MUTED),
+        ("Open Market Liquidity:", True, COLOR_GREEN),
+        ("  * DEXs, AMMs, Lending Markets", False, COLOR_TEXT_MUTED),
+        ("  * Zero PII Broadcasted", False, COLOR_TEXT_MUTED)
     ]
-    py = card_y0 + 95
-    for pit in pub_items:
-        draw.text((1145, py), pit, font=get_font("consola.ttf" if "  *" in pit else "arialbd.ttf" if ":" in pit else "arial.ttf", 14), fill=COLOR_TEXT_MUTED)
-        py += 29
+    py = card_y0 + 85
+    for p_txt, is_bld, col in pub_items:
+        f = get_font("arialbd.ttf" if is_bld else "consola.ttf" if "  *" in p_txt else "arial.ttf", 13)
+        draw.text((1145, py), p_txt, font=f, fill=col)
+        py += 24
 
-    # Bottom Flow Label
-    draw.rounded_rectangle((60, 765, w - 60, 835), radius=8, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
-    flow_font = get_font("arialbd.ttf", 15)
-    draw.text((100, 785), "CROSS-CHAIN FLOW: Private Encrypted Intents  -->  Homomorphic LSM Netting  -->  Residual State Root Settled On-Chain", 
+    # Bottom Flow Banner: y=775 to y=840 (Leaves safe margin)
+    draw.rounded_rectangle((60, 775, w - 60, 840), radius=8, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    flow_font = get_font("arialbd.ttf", 14)
+    draw.text((100, 796), "CROSS-CHAIN FLOW: Private Encrypted Intents  -->  Homomorphic LSM Netting  -->  Residual State Root Settled On-Chain", 
               font=flow_font, fill=COLOR_YELLOW)
 
     out_file = os.path.join(ASSETS_DIR, "diagram_1_unifi_liquidity_topology.png")
     img.save(out_file, quality=95)
-    print(f"[+] Saved Topology Diagram: {out_file}")
+    print(f"[+] Saved Topology Diagram (Fixed Text Overflow): {out_file}")
 
 # ==============================================================================
 # ASSET 3: METADATA LEAKAGE COMPARISON (1600x900)
@@ -316,20 +306,20 @@ def generate_metadata_leakage_diagram():
                       "Quantifying Side-Channel Information Exposure: Public Cleartext Bridges vs. Rayls Orchestrator ZK Gate", 
                       width=w)
 
-    card_y0, card_y1 = 200, 740
+    card_y0, card_y1 = 165, 745
     pw = 690
 
     # Panel Left: Public Unshielded Bridges
     draw.rounded_rectangle((60, card_y0, 60 + pw, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_RED, width=2)
     draw.rounded_rectangle((60, card_y0, 60 + pw, card_y0 + 6), radius=6, fill=COLOR_RED)
-    draw.text((90, card_y0 + 25), "UNSHIELDED PUBLIC BRIDGES (Wormhole / LayerZero)", font=get_font("arialbd.ttf", 20), fill=COLOR_RED)
-    draw.text((90, card_y0 + 58), "High-Risk Side-Channel Vulnerability & Statutory Breach", font=get_font("arial.ttf", 15), fill=COLOR_TEXT_MUTED)
+    draw.text((90, card_y0 + 24), "UNSHIELDED PUBLIC BRIDGES (Wormhole / LayerZero)", font=get_font("arialbd.ttf", 19), fill=COLOR_RED)
+    draw.text((90, card_y0 + 54), "High-Risk Side-Channel Vulnerability & Statutory Breach", font=get_font("arial.ttf", 14), fill=COLOR_TEXT_MUTED)
 
     # Entropy metric block
-    draw.rounded_rectangle((90, card_y0 + 95, 60 + pw - 30, card_y0 + 180), radius=8, fill=(35, 20, 24))
-    draw.text((115, card_y0 + 108), "SHANNON CALLEDATA ENTROPY", font=get_font("arialbd.ttf", 14), fill=COLOR_RED)
-    draw.text((115, card_y0 + 132), "2.4183 / 8.0000 bits/byte", font=get_font("arialbd.ttf", 28), fill=COLOR_TEXT_WHITE)
-    draw.text((470, card_y0 + 138), "(-69.77% Deficit)", font=get_font("arialbd.ttf", 18), fill=COLOR_RED)
+    draw.rounded_rectangle((90, card_y0 + 90, 60 + pw - 30, card_y0 + 175), radius=8, fill=(35, 20, 24))
+    draw.text((115, card_y0 + 104), "SHANNON CALLEDATA ENTROPY", font=get_font("arialbd.ttf", 13), fill=COLOR_RED)
+    draw.text((115, card_y0 + 126), "2.4183 / 8.0000 bits/byte", font=get_font("arialbd.ttf", 26), fill=COLOR_TEXT_WHITE)
+    draw.text((470, card_y0 + 132), "(-69.77% Deficit)", font=get_font("arialbd.ttf", 16), fill=COLOR_RED)
 
     pub_risks = [
         ("Counterparty Addresses", "LEAKED: Originator and beneficiary in cleartext calldata", COLOR_RED),
@@ -338,24 +328,24 @@ def generate_metadata_leakage_diagram():
         ("Timing Correlation", "CRITICAL: Public mempool relayer latency Delta t approx 1.3s", COLOR_RED),
         ("Regulatory Compliance", "FAILED: Breaches GDPR Art 5/17, US GLBA, & Brazil LC 105/2001", COLOR_RED)
     ]
-    ry = card_y0 + 205
+    ry = card_y0 + 195
     for r_title, r_desc, r_col in pub_risks:
-        draw.text((90, ry), f"[X] {r_title}", font=get_font("arialbd.ttf", 16), fill=r_col)
-        draw.text((90, ry + 26), r_desc, font=get_font("arial.ttf", 14), fill=COLOR_TEXT_MUTED)
-        ry += 58
+        draw.text((90, ry), f"[X] {r_title}", font=get_font("arialbd.ttf", 15), fill=r_col)
+        draw.text((90, ry + 24), r_desc, font=get_font("arial.ttf", 13), fill=COLOR_TEXT_MUTED)
+        ry += 54
 
     # Panel Right: Rayls Orchestrator ZK Gate
     rx0 = 60 + pw + 40
     draw.rounded_rectangle((rx0, card_y0, w - 60, card_y1), radius=12, fill=COLOR_CARD_BG, outline=COLOR_GREEN, width=2)
     draw.rounded_rectangle((rx0, card_y0, w - 60, card_y0 + 6), radius=6, fill=COLOR_GREEN)
-    draw.text((rx0 + 30, card_y0 + 25), "RAYLS ORCHESTRATOR ENCRYPTED GATE", font=get_font("arialbd.ttf", 20), fill=COLOR_GREEN)
-    draw.text((rx0 + 30, card_y0 + 58), "Constant-Time ZK Commitments & Dual-Authority Auditing", font=get_font("arial.ttf", 15), fill=COLOR_TEXT_MUTED)
+    draw.text((rx0 + 30, card_y0 + 24), "RAYLS ORCHESTRATOR ENCRYPTED GATE", font=get_font("arialbd.ttf", 19), fill=COLOR_GREEN)
+    draw.text((rx0 + 30, card_y0 + 54), "Constant-Time ZK Commitments & Dual-Authority Auditing", font=get_font("arial.ttf", 14), fill=COLOR_TEXT_MUTED)
 
     # Entropy metric block
-    draw.rounded_rectangle((rx0 + 30, card_y0 + 95, w - 90, card_y0 + 180), radius=8, fill=(20, 35, 24))
-    draw.text((rx0 + 55, card_y0 + 108), "SHANNON CALLEDATA ENTROPY", font=get_font("arialbd.ttf", 14), fill=COLOR_GREEN)
-    draw.text((rx0 + 55, card_y0 + 132), "7.7566 / 8.0000 bits/byte", font=get_font("arialbd.ttf", 28), fill=COLOR_TEXT_WHITE)
-    draw.text((rx0 + 410, card_y0 + 138), "(96.96% Uniform Ceiling)", font=get_font("arialbd.ttf", 18), fill=COLOR_GREEN)
+    draw.rounded_rectangle((rx0 + 30, card_y0 + 90, w - 90, card_y0 + 175), radius=8, fill=(20, 35, 24))
+    draw.text((rx0 + 55, card_y0 + 104), "SHANNON CALLEDATA ENTROPY", font=get_font("arialbd.ttf", 13), fill=COLOR_GREEN)
+    draw.text((rx0 + 55, card_y0 + 126), "7.7566 / 8.0000 bits/byte", font=get_font("arialbd.ttf", 26), fill=COLOR_TEXT_WHITE)
+    draw.text((rx0 + 410, card_y0 + 132), "(96.96% Uniform Ceiling)", font=get_font("arialbd.ttf", 16), fill=COLOR_GREEN)
 
     rayls_features = [
         ("Counterparty Confidentiality", "SHIELDED: Padded AES-GCM-SIV ciphertexts with ephemeral ECDH", COLOR_GREEN),
@@ -364,16 +354,16 @@ def generate_metadata_leakage_diagram():
         ("Temporal Decoupling", "ISOLATED: Netting executed across discrete clearing epochs", COLOR_GREEN),
         ("Sovereign Compliance", "PROGRAMMABLE: Viewing keys enable direct Central Bank auditability", COLOR_GREEN)
     ]
-    sy = card_y0 + 205
+    sy = card_y0 + 195
     for s_title, s_desc, s_col in rayls_features:
-        draw.text((rx0 + 30, sy), f"[v] {s_title}", font=get_font("arialbd.ttf", 16), fill=s_col)
-        draw.text((rx0 + 30, sy + 26), s_desc, font=get_font("arial.ttf", 14), fill=COLOR_TEXT_MUTED)
-        sy += 58
+        draw.text((rx0 + 30, sy), f"[v] {s_title}", font=get_font("arialbd.ttf", 15), fill=s_col)
+        draw.text((rx0 + 30, sy + 24), s_desc, font=get_font("arial.ttf", 13), fill=COLOR_TEXT_MUTED)
+        sy += 54
 
-    # Bottom summary banner
-    draw.rounded_rectangle((60, 770, w - 60, 840), radius=8, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
-    draw.text((110, 790), "CONCLUSION: Rayls eliminates all side-channel vectors while preserving institutional regulatory compliance.", 
-              font=get_font("arialbd.ttf", 15), fill=COLOR_YELLOW)
+    # Bottom summary banner: y=775 to y=840
+    draw.rounded_rectangle((60, 775, w - 60, 840), radius=8, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    draw.text((100, 796), "CONCLUSION: Rayls eliminates all side-channel vectors while preserving institutional regulatory compliance.", 
+              font=get_font("arialbd.ttf", 14), fill=COLOR_YELLOW)
 
     out_file = os.path.join(ASSETS_DIR, "diagram_2_metadata_leakage_comparison.png")
     img.save(out_file, quality=95)
@@ -390,28 +380,24 @@ def generate_evidence_matrix_image():
     # Top brand bar
     draw_horizontal_gradient_rect(draw, (0, 0, w, 8), COLOR_PURPLE, COLOR_YELLOW)
 
-    # Logo
-    if os.path.exists(LOGO_PATH):
+    # Official white logo
+    if os.path.exists(LOGO_WHITE_PATH):
         try:
-            logo_raw = Image.open(LOGO_PATH).convert("RGBA")
-            logo_w = 120
+            logo_raw = Image.open(LOGO_WHITE_PATH).convert("RGBA")
+            logo_w = 170
             aspect = logo_raw.height / logo_raw.width
             logo_h = int(logo_w * aspect)
             logo_resized = logo_raw.resize((logo_w, logo_h), Image.Resampling.LANCZOS)
-            draw.rounded_rectangle((60, 28, 60 + logo_w + 24, 28 + logo_h + 24), radius=8, fill=(255, 255, 255))
-            img.paste(logo_resized, (72, 40), logo_resized)
+            img.paste(logo_resized, (60, 24), logo_resized)
         except Exception:
             pass
 
     # Header title
-    draw.rounded_rectangle((w - 420, 32, w - 60, 76), radius=6, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
-    draw.text((w - 400, 44), "THE RAIL // EMPIRICAL EVIDENCE MATRIX", font=get_font("arialbd.ttf", 16), fill=COLOR_YELLOW)
-
-    draw.text((60, 110), "COMPLETE EVIDENCE BOUNDARY & VERIFICATION MATRIX", font=get_font("arialbd.ttf", 34), fill=COLOR_TEXT_WHITE)
-    draw.text((60, 155), "Granular Classification: Live On-Chain Cast Telemetry, Foundry Test Suite Execution, and Statutory Authorities", font=get_font("arial.ttf", 18), fill=COLOR_TEXT_MUTED)
+    draw.text((60, 95), "COMPLETE EVIDENCE BOUNDARY & VERIFICATION MATRIX", font=get_font("arialbd.ttf", 32), fill=COLOR_TEXT_WHITE)
+    draw.text((60, 145), "Granular Classification: Live On-Chain Cast Telemetry, Foundry Test Suite Execution, and Statutory Authorities", font=get_font("arial.ttf", 17), fill=COLOR_TEXT_MUTED)
 
     # Table layout
-    ty0 = 210
+    ty0 = 195
     row_h = 72
     col_x = [60, 120, 560, 950, 1420, 1860]
 
@@ -424,7 +410,7 @@ def generate_evidence_matrix_image():
     # 20 Rows Data
     rows = [
         ("1", "Public L1 Chain ID", "Verified On-Chain", "cast chain-id --rpc-url ...", "72957 (0x11cfd)", COLOR_PURPLE),
-        ("2", "Canonical Block Number", "Verified On-Chain", "cast block-number --rpc-url ...", "#13,265,264 (0xca6970)", COLOR_PURPLE),
+        ("2", "Canonical Block Number", "Verified On-Chain", "cast block-number --rpc-url ...", "#13,268,585+ (Live Head)", COLOR_PURPLE),
         ("3", "Client Node Architecture", "Verified On-Chain", "web3_clientVersion RPC query", "1.4.1 (Rust Reth 6909618b)", COLOR_PURPLE),
         ("4", "L1 Block Gas Limit Ceiling", "Verified On-Chain", "eth_getBlockByNumber('latest')", "500,000,000 gas (True)", COLOR_PURPLE),
         ("5", "FeeAggregator Proxy Contract", "Verified On-Chain", "Contract code inspection", "0x07E1...17e17e17E2", COLOR_PURPLE),
@@ -482,13 +468,13 @@ def generate_evidence_matrix_image():
 
 def main():
     print("=" * 78)
-    print("GENERATING WEEK 5 NOIR VENTURES HIGH-CONTRAST BRAND ASSETS")
+    print("REGENERATING WEEK 5 NOIR BRAND ASSETS (ZERO OVERFLOW & X-SAFE)")
     print("=" * 78)
     generate_cover_image()
     generate_topology_diagram()
     generate_metadata_leakage_diagram()
     generate_evidence_matrix_image()
-    print("\n[+] All 4 brand visual assets successfully generated in assets/")
+    print("\n[+] All 4 brand visual assets regenerated cleanly in assets/")
 
 if __name__ == "__main__":
     main()
