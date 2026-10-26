@@ -1,0 +1,137 @@
+{
+  "benchmark_title": "Side-Channel Metadata Leakage Differential Benchmark",
+  "protocol": "Public EVM Bridge vs. Rayls Orchestrator Gate",
+  "public_bridge_metrics": {
+    "mean_entropy_bits_per_byte": 2.4183,
+    "theoretical_max_entropy": 8.0,
+    "entropy_deficit_pct": 69.77,
+    "gas_variance": 36,
+    "packet_size_fixed": false,
+    "counterparty_identifiable": true,
+    "timing_correlation_risk": "Critical (Delta t approx 1.3s to public mempool)"
+  },
+  "rayls_orchestrator_metrics": {
+    "mean_entropy_bits_per_byte": 7.7566,
+    "theoretical_max_entropy": 8.0,
+    "entropy_deficit_pct": 3.04,
+    "gas_variance": 36,
+    "packet_size_fixed": true,
+    "fixed_packet_size_bytes": 801,
+    "counterparty_identifiable": false,
+    "timing_correlation_risk": "Shielded (Decoupled epoch batch settlement)"
+  },
+  "public_samples": [
+    {
+      "id": 1,
+      "type": "Public Unshielded Bridge",
+      "amount_wei": 100000000000,
+      "payload_length_bytes": 132,
+      "zero_bytes_count": 85,
+      "shannon_entropy": 2.3182,
+      "simulated_gas": 87092,
+      "counterparty_visible": true,
+      "amount_visible": true
+    },
+    {
+      "id": 2,
+      "type": "Public Unshielded Bridge",
+      "amount_wei": 1500000000000,
+      "payload_length_bytes": 132,
+      "zero_bytes_count": 83,
+      "shannon_entropy": 2.416,
+      "simulated_gas": 87116,
+      "counterparty_visible": true,
+      "amount_visible": true
+    },
+    {
+      "id": 3,
+      "type": "Public Unshielded Bridge",
+      "amount_wei": 50000000000000,
+      "payload_length_bytes": 132,
+      "zero_bytes_count": 83,
+      "shannon_entropy": 2.4093,
+      "simulated_gas": 87116,
+      "counterparty_visible": true,
+      "amount_visible": true
+    },
+    {
+      "id": 4,
+      "type": "Public Unshielded Bridge",
+      "amount_wei": 250000000000000,
+      "payload_length_bytes": 132,
+      "zero_bytes_count": 83,
+      "shannon_entropy": 2.4521,
+      "simulated_gas": 87116,
+      "counterparty_visible": true,
+      "amount_visible": true
+    },
+    {
+      "id": 5,
+      "type": "Public Unshielded Bridge",
+      "amount_wei": 10000000000000000000,
+      "payload_length_bytes": 132,
+      "zero_bytes_count": 82,
+      "shannon_entropy": 2.4961,
+      "simulated_gas": 87128,
+      "counterparty_visible": true,
+      "amount_visible": true
+    }
+  ],
+  "rayls_samples": [
+    {
+      "id": 1,
+      "type": "Rayls Orchestrator ZK Commitment",
+      "amount_wei": "CONFIDENTIAL (ZK Commitment)",
+      "payload_length_bytes": 805,
+      "zero_bytes_count": 4,
+      "shannon_entropy": 7.7632,
+      "simulated_gas": 171832,
+      "counterparty_visible": false,
+      "amount_visible": false
+    },
+    {
+      "id": 2,
+      "type": "Rayls Orchestrator ZK Commitment",
+      "amount_wei": "CONFIDENTIAL (ZK Commitment)",
+      "payload_length_bytes": 805,
+      "zero_bytes_count": 4,
+      "shannon_entropy": 7.7826,
+      "simulated_gas": 171832,
+      "counterparty_visible": false,
+      "amount_visible": false
+    },
+    {
+      "id": 3,
+      "type": "Rayls Orchestrator ZK Commitment",
+      "amount_wei": "CONFIDENTIAL (ZK Commitment)",
+      "payload_length_bytes": 805,
+      "zero_bytes_count": 1,
+      "shannon_entropy": 7.7458,
+      "simulated_gas": 171868,
+      "counterparty_visible": false,
+      "amount_visible": false
+    },
+    {
+      "id": 4,
+      "type": "Rayls Orchestrator ZK Commitment",
+      "amount_wei": "CONFIDENTIAL (ZK Commitment)",
+      "payload_length_bytes": 805,
+      "zero_bytes_count": 3,
+      "shannon_entropy": 7.7475,
+      "simulated_gas": 171844,
+      "counterparty_visible": false,
+      "amount_visible": false
+    },
+    {
+      "id": 5,
+      "type": "Rayls Orchestrator ZK Commitment",
+      "amount_wei": "CONFIDENTIAL (ZK Commitment)",
+      "payload_length_bytes": 805,
+      "zero_bytes_count": 3,
+      "shannon_entropy": 7.7441,
+      "simulated_gas": 171844,
+      "counterparty_visible": false,
+      "amount_visible": false
+    }
+  ]
+}

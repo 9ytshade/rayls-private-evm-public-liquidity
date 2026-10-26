@@ -1,0 +1,23 @@
+{
+  "network": "Rayls Public Mainnet",
+  "rpc_url": "https://mainnet-rpc.rayls.com",
+  "chain_id": 72957,
+  "chain_id_hex": "0x11cfd",
+  "canonical_block_number": 13265264,
+  "client_version": "1.4.1 (6909618ba3d178884e613b329a99816ba546f62e)",
+  "latest_block": {
+    "hash": "0xf96c4b90924edfdcdeb1cd514e3087b20cf11385dbd466b3d993c28fe79a8449",
+    "parent_hash": "0xe1ffe95243b7fa1720311d06cc27c14413048f44b1fb97811191fa503a1389bb",
+    "gas_limit": 500000000,
+    "gas_used": 0,
+    "timestamp": 1793023466,
+    "transaction_count": 0
+  },
+  "fee_aggregator": {
+    "proxy_address": "0x07E17e17e17e17E17E17E17e17E17e17e17e17E2",
+    "eip1967_implementation_slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    "implementation_address": "0x9bd6479bd40d18e6211322078ba1ef304fb31fd2",
+    "eip1967_admin_slot": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103",
+    "admin_address": "0x0000000000000000000000000000000000000000"
+  }
+}
