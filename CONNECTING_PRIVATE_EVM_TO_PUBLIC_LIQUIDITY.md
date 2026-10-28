@@ -190,9 +190,13 @@ The Orchestrator is the coordination network of the Rayls Privacy Network system
 
 ### 3.3 Tier 3: Rayls Public Chain (Chain ID `72957`)
 The public settlement layer connects sovereign subnets to global liquidity:
-- **Canonical Telemetry:** Verified on-chain via Reth `1.4.1` at Block `#13,265,264+` with a `500,000,000 gas` block limit.
+- **Canonical Telemetry:** Verified on-chain via Reth `1.4.1` at Block `#13,268,585+` with a `500,000,000 gas` block limit.
 - **System Fee Aggregator:** Anchored at canonical proxy `0x07E17e17e17e17E17E17E17e17E17e17e17e17E2`, pointing to implementation `0x9bd6479bd40d18e6211322078ba1ef304fb31fd2`.
 - **Public Composability:** Secondary markets, automated market makers (AMMs), decentralized exchanges, and public tokenized bond order books execute on this layer. Only cryptographic state roots and residual settlement proofs are written to public state.
+
+> [!NOTE]
+> **Epistemic Note on Block Gas Ceiling vs. Throughput:**  
+> As established in our Section 8 Evidence Boundary Matrix, the `500,000,000 gas` limit represents the **protocol-configured block gas ceiling** defined in the Reth block header, establishing the maximum computational headroom allowed per block. It must **not** be conflated with empirical measured transaction throughput (TPS), which is determined by state access patterns, I/O disk writes, and zero-knowledge proof verification complexity.
 
 ---
 
@@ -313,6 +317,10 @@ For each cross-chain transaction:
    - **Regulators:** Can decrypt the transaction in real time using their supervisory viewing key $sk_{\text{reg}}$ to audit AML/CFT compliance.
    - **External Observers / MEV Bots:** Observe only pseudo-random ciphertext with Shannon entropy $\approx 7.76\text{ bits/byte}$.
    - **Illicit Actors:** Cannot transact anonymously because the Orchestrator's verification gate rejects payloads that lack valid regulator viewing key delegations.
+
+> [!NOTE]
+> **Epistemic Note on Technical vs. Legal Settlement Finality:**  
+> Cryptographic zero-knowledge verification and viewing keys provide verifiable mathematical integrity and authorized supervisory data access. However, as recognized under **CPMI-IOSCO Principle 8 (Settlement Finality)**, technical consensus finality does not automatically constitute statutory legal finality. Legal finality requires formal statutory recognition under central bank rulebooks, clearinghouse operational regulations, and relevant banking legislation (such as Banco Central do Brasil regulatory directives for Drex). Technical proof validity is a necessary prerequisite, but not a replacement, for statutory legal finality.
 
 ---
 

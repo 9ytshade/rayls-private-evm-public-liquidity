@@ -107,9 +107,9 @@ def generate_cover_image():
             "items": [
                 "- Rust Reth EVM Engine (Sub-second)",
                 "- Bank Deposits & Custodial Portfolios",
-                "- Statutory Banking Secrecy Protected",
-                "- Lei Complementar 105 & GDPR Compliant",
-                "- Zero Plaintext Order Book Exposure"
+                "- Designed for Banking Secrecy Rules",
+                "- Built for LC 105 & GDPR Architecture",
+                "- Private Order Books Retained Locally"
             ],
             "badge": "ISOLATED CONFIDENTIALITY"
         },
@@ -131,11 +131,11 @@ def generate_cover_image():
             "name": "Rayls Public L1",
             "accent": COLOR_GREEN,
             "items": [
-                "- Chain ID: 72957 (Block #13,265,264+)",
-                "- 500M Block Gas Limit Throughput",
+                "- Chain ID: 72957 (Block #13,268,585+)",
+                "- 500M Protocol Block Gas Ceiling",
                 "- Canonical FeeAggregator (0x07E1...17E2)",
                 "- Secondary Liquidity Pools & DeFi AMMs",
-                "- Cryptographic State Roots (Zero Leaks)"
+                "- Verifiable Cryptographic State Roots"
             ],
             "badge": "DECENTRALIZED LIQUIDITY"
         }
@@ -216,9 +216,9 @@ def generate_topology_diagram():
         ("  * Institutional Tokenized Bond Funds", False, COLOR_TEXT_MUTED),
         ("  * Private Order Routing & Portfolios", False, COLOR_TEXT_MUTED),
         ("", False, COLOR_TEXT_MUTED),
-        ("Confidentiality Invariant:", True, COLOR_PURPLE),
-        ("  * Zero unencrypted order book leakage", False, COLOR_TEXT_MUTED),
-        ("  * Banking Secrecy (LC 105) Protected", False, COLOR_TEXT_MUTED)
+        ("Confidentiality Design:", True, COLOR_PURPLE),
+        ("  * Private Order Books Retained Locally", False, COLOR_TEXT_MUTED),
+        ("  * Engineered for LC 105 Secrecy Rules", False, COLOR_TEXT_MUTED)
     ]
     sy = card_y0 + 85
     for s_txt, is_bld, col in sub_items:
@@ -275,7 +275,7 @@ def generate_topology_diagram():
         ("", False, COLOR_TEXT_MUTED),
         ("Open Market Liquidity:", True, COLOR_GREEN),
         ("  * DEXs, AMMs, Lending Markets", False, COLOR_TEXT_MUTED),
-        ("  * Zero PII Broadcasted", False, COLOR_TEXT_MUTED)
+        ("  * Only State Roots Broadcasted", False, COLOR_TEXT_MUTED)
     ]
     py = card_y0 + 85
     for p_txt, is_bld, col in pub_items:
@@ -326,7 +326,7 @@ def generate_metadata_leakage_diagram():
         ("Trade Size & Token", "LEAKED: Exact balance amount exposed in uint256 parameter", COLOR_RED),
         ("Gas Profiling Side-Channel", "LEAKED: Execution branches vary by zero vs non-zero storage slots", COLOR_RED),
         ("Timing Correlation", "CRITICAL: Public mempool relayer latency Delta t approx 1.3s", COLOR_RED),
-        ("Regulatory Compliance", "FAILED: Breaches GDPR Art 5/17, US GLBA, & Brazil LC 105/2001", COLOR_RED)
+        ("Regulatory Conflict", "CONFLICT: Exposes non-public financial metadata (NPI) on-chain", COLOR_RED)
     ]
     ry = card_y0 + 195
     for r_title, r_desc, r_col in pub_risks:
@@ -352,7 +352,7 @@ def generate_metadata_leakage_diagram():
         ("Mathematical Netting", "HOMOMORPHIC: Multi-bank netting aggregates encrypted balances", COLOR_GREEN),
         ("Execution Gas Uniformity", "CONSTANT-TIME: Alt_BN128 pairing check runs in constant gas", COLOR_GREEN),
         ("Temporal Decoupling", "ISOLATED: Netting executed across discrete clearing epochs", COLOR_GREEN),
-        ("Sovereign Compliance", "PROGRAMMABLE: Viewing keys enable direct Central Bank auditability", COLOR_GREEN)
+        ("Auditing Architecture", "PROGRAMMABLE: Viewing keys enable selective supervisory auditability", COLOR_GREEN)
     ]
     sy = card_y0 + 195
     for s_title, s_desc, s_col in rayls_features:
@@ -362,7 +362,7 @@ def generate_metadata_leakage_diagram():
 
     # Bottom summary banner: y=775 to y=840
     draw.rounded_rectangle((60, 775, w - 60, 840), radius=8, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
-    draw.text((100, 796), "CONCLUSION: Rayls eliminates all side-channel vectors while preserving institutional regulatory compliance.", 
+    draw.text((100, 796), "CONCLUSION: Rayls minimizes calldata & execution side-channel leakage to near-maximum entropy.", 
               font=get_font("arialbd.ttf", 14), fill=COLOR_YELLOW)
 
     out_file = os.path.join(ASSETS_DIR, "diagram_2_metadata_leakage_comparison.png")
