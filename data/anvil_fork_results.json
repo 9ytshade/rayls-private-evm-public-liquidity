@@ -1,0 +1,10 @@
+{
+  "target_rpc": "https://mainnet-rpc.rayls.com",
+  "chain_id": 72957,
+  "forked_block_number": 13391023,
+  "impersonated_account": "0x07E17e17e17e17E17E17E17e17E17e17e17e17E2",
+  "target_storage_slot": 1,
+  "original_storage_value": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "overridden_storage_value": "0x00000000000000000000000000000000000000000000000000000000deadbeef",
+  "mutation_success": true
+}

@@ -21,14 +21,19 @@ echo "==========================================================================
 
 # 1. Launch Anvil in fork mode in background
 echo "[1/5] Launching Anvil fork on port ${PORT}..."
-~/.foundry/bin/anvil --fork-url "${RAYLS_MAINNET_RPC}" --chain-id 72957 --port "${PORT}" --silent &
+~/.foundry/bin/anvil --fork-url "${RAYLS_MAINNET_RPC}" --chain-id 72957 --port "${PORT}" > /tmp/anvil_rayls.log 2>&1 &
 ANVIL_PID=$!
 
 # Ensure Anvil is killed on exit
 trap "kill -9 ${ANVIL_PID} 2>/dev/null || true" EXIT
 
-# Wait for Anvil to initialize
-sleep 6
+# Wait until Anvil is responsive (up to 15 seconds)
+for i in {1..15}; do
+    if ~/.foundry/bin/cast block-number --rpc-url "${RPC_URL}" >/dev/null 2>&1; then
+        break
+    fi
+    sleep 1
+done
 
 # 2. Query block number on local fork
 FORK_BLOCK=$(~/.foundry/bin/cast block-number --rpc-url "${RPC_URL}")
@@ -60,6 +65,23 @@ if [ "${UPDATED_SLOT_1}" == "${TARGET_OVERRIDE}" ]; then
     echo ""
     echo "[+] SUCCESS: Anvil storage override verified with 100% precision!"
     echo "    Demonstrated full local state mutation capability on forked Rayls Mainnet."
+    
+    # Export raw JSON output
+    DATA_DIR="$(dirname "$0")/../data"
+    mkdir -p "${DATA_DIR}"
+    cat <<EOF > "${DATA_DIR}/anvil_fork_results.json"
+{
+  "target_rpc": "${RAYLS_MAINNET_RPC}",
+  "chain_id": 72957,
+  "forked_block_number": ${FORK_BLOCK},
+  "impersonated_account": "${FEE_AGGREGATOR}",
+  "target_storage_slot": 1,
+  "original_storage_value": "${ORIGINAL_SLOT_1}",
+  "overridden_storage_value": "${UPDATED_SLOT_1}",
+  "mutation_success": true
+}
+EOF
+    echo "    Exported raw results to ${DATA_DIR}/anvil_fork_results.json"
 else
     echo "[-] FAILED: Slot mismatch."
     exit 1

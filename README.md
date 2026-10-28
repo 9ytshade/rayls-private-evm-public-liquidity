@@ -93,12 +93,16 @@ An institutional research deep dive and empirical verification test suite decons
 │   └── generate_week_5_brand_assets.py       # High-contrast Noir brand visuals generator
 ├── data/
 │   ├── metadata_leakage_results.json         # Raw entropy & gas profiling benchmark data
-│   └── rayls_mainnet_telemetry.json          # Live L1 RPC state at Block #13,265,264+
+│   ├── rayls_mainnet_telemetry.json          # Live L1 RPC state at Block #13,268,585+
+│   ├── foundry_test_results.json             # Complete raw Foundry test execution results
+│   └── anvil_fork_results.json               # Raw Anvil local fork and storage mutation results
 ├── assets/
-│   ├── cover_image_liquidity_bridge.png      # 1600x900 Master Cover
-│   ├── diagram_1_unifi_liquidity_topology.png # 1600x900 3-Tier Pipeline
+│   ├── cover_image_liquidity_bridge.png      # 1600x900 Master Cover (X Safe Zone)
+│   ├── diagram_1_unifi_liquidity_topology.png # 1600x900 3-Tier Pipeline (Zero Text Overflow)
 │   ├── diagram_2_metadata_leakage_comparison.png # 1600x900 Benchmark Infographic
-│   └── evidence_boundary_matrix_table.png    # 1920x1800 20-Row Matrix
+│   ├── evidence_boundary_matrix_table.png    # 1920x1800 20-Row Matrix
+│   └── terminal screen record.mp4            # Official 25s inspectable demo recording
+├── run_all_week5_demonstrations.sh           # Master all-in-one execution runner
 ├── CONNECTING_PRIVATE_EVM_TO_PUBLIC_LIQUIDITY.md # Master 3,500-word Research Article
 ├── CROSS_POST_SUMMARY.md                     # Executive Short-Form Cross-Post Package
 ├── PHASE_1_MACRO_SYSTEMIC_PROBLEM.md         # Phase 1 Problem Analysis
