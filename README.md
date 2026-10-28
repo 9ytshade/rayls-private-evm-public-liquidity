@@ -93,7 +93,7 @@ An institutional research deep dive and empirical verification test suite decons
 │   └── generate_week_5_brand_assets.py       # High-contrast Noir brand visuals generator
 ├── data/
 │   ├── metadata_leakage_results.json         # Raw entropy & gas profiling benchmark data
-│   ├── rayls_mainnet_telemetry.json          # Live L1 RPC state at Block #13,268,585+
+│   ├── rayls_mainnet_telemetry.json          # Live L1 RPC state at Block #13,265,264+
 │   ├── foundry_test_results.json             # Complete raw Foundry test execution results
 │   └── anvil_fork_results.json               # Raw Anvil local fork and storage mutation results
 ├── assets/

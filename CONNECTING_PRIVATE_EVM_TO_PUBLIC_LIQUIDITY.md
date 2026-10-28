@@ -190,7 +190,7 @@ The Orchestrator is the coordination network of the Rayls Privacy Network system
 
 ### 3.3 Tier 3: Rayls Public Chain (Chain ID `72957`)
 The public settlement layer connects sovereign subnets to global liquidity:
-- **Canonical Telemetry:** Verified on-chain via Reth `1.4.1` at Block `#13,268,585+` with a `500,000,000 gas` block limit.
+- **Canonical Telemetry:** Verified on-chain via Reth `1.4.1` at Block `#13,265,264+` with a `500,000,000 gas` block limit.
 - **System Fee Aggregator:** Anchored at canonical proxy `0x07E17e17e17e17E17E17E17e17E17e17e17e17E2`, pointing to implementation `0x9bd6479bd40d18e6211322078ba1ef304fb31fd2`.
 - **Public Composability:** Secondary markets, automated market makers (AMMs), decentralized exchanges, and public tokenized bond order books execute on this layer. Only cryptographic state roots and residual settlement proofs are written to public state.
 

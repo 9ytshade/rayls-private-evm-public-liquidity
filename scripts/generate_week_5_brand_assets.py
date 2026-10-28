@@ -131,7 +131,7 @@ def generate_cover_image():
             "name": "Rayls Public L1",
             "accent": COLOR_GREEN,
             "items": [
-                "- Chain ID: 72957 (Block #13,268,585+)",
+                "- Chain ID: 72957 (Block #13,265,264+)",
                 "- 500M Protocol Block Gas Ceiling",
                 "- Canonical FeeAggregator (0x07E1...17E2)",
                 "- Secondary Liquidity Pools & DeFi AMMs",
@@ -410,7 +410,7 @@ def generate_evidence_matrix_image():
     # 20 Rows Data
     rows = [
         ("1", "Public L1 Chain ID", "Verified On-Chain", "cast chain-id --rpc-url ...", "72957 (0x11cfd)", COLOR_PURPLE),
-        ("2", "Canonical Block Number", "Verified On-Chain", "cast block-number --rpc-url ...", "#13,268,585+ (Live Head)", COLOR_PURPLE),
+        ("2", "Canonical Block Number", "Verified On-Chain", "cast block-number --rpc-url ...", "#13,265,264 (0xca6970)", COLOR_PURPLE),
         ("3", "Client Node Architecture", "Verified On-Chain", "web3_clientVersion RPC query", "1.4.1 (Rust Reth 6909618b)", COLOR_PURPLE),
         ("4", "L1 Block Gas Limit Ceiling", "Verified On-Chain", "eth_getBlockByNumber('latest')", "500,000,000 gas (True)", COLOR_PURPLE),
         ("5", "FeeAggregator Proxy Contract", "Verified On-Chain", "Contract code inspection", "0x07E1...17e17e17E2", COLOR_PURPLE),
